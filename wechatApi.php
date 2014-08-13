@@ -20,13 +20,9 @@ class wechatCallbackapi{
         if($this->checkSignature()){
             echo $echoStr;
             //reply message
-            $this->responseMsg();
+            echo $this->receiveMsg();
             exit;
         }
-    }
-
-    public function responseMsg(){
-        echo $this->receiveMsg();
     }
 
     private function checkSignature(){
@@ -40,11 +36,7 @@ class wechatCallbackapi{
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
 
-        if( $tmpStr == $signature ){
-            return true;
-        }else{
-            return false;
-        }
+        return $tmpStr == $signature;
     }
 
     private function receiveMsg(){
@@ -134,7 +126,7 @@ class wechatCallbackapi{
                     //文本消息内容
                     $Content = $postObj->Content;
                     //回复
-                    $contentStr = "you have sent"+$Content;
+                    $contentStr = "you have sent ".$Content;
                     $resultStr = sprintf($textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "image":
@@ -143,7 +135,7 @@ class wechatCallbackapi{
                     //图片消息媒体id，可以调用多媒体文件下载接口拉取数据。
                     $MediaId = $postObj->MediaId;
                     //回复
-                    $contentStr = "PicUrl="+$PicUrl+"\nMediaId="+$MediaId;
+                    $contentStr = "PicUrl=".$PicUrl."\nMediaId=".$MediaId;
                     $resultStr = sprintf($textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "voice":
@@ -152,7 +144,7 @@ class wechatCallbackapi{
                     //语音格式，如amr，speex等
                     $Format = $postObj->Format;
                     //回复
-                    $contentStr = "MediaId="+$MediaId+"\nFormat="+$Format;
+                    $contentStr = "MediaId=".$MediaId."\nFormat=".$Format;
                     $resultStr = sprintf($textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "video":
@@ -161,7 +153,7 @@ class wechatCallbackapi{
                     //视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
                     $ThumbMediaId = $postObj->ThumbMediaId;
                     //回复
-                    $contentStr = "MediaId="+$MediaId+"\nThumbMediaId="+$ThumbMediaId;
+                    $contentStr = "MediaId=".$MediaId."\nThumbMediaId=".$ThumbMediaId;
                     $resultStr = sprintf($textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "location":
@@ -174,7 +166,7 @@ class wechatCallbackapi{
                     //地理位置信息
                     $Label = $postObj->Label;
                     //回复
-                    $contentStr = "Location_X="+$Location_X+"\nLocation_Y="+$Location_Y+"\nScale="+$Scale+"\nLabel="+$Label;
+                    $contentStr = "Location_X=".$Location_X."\nLocation_Y=".$Location_Y."\nScale=".$Scale."\nLabel=".$Label;
                     $resultStr = sprintf($textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "link":
@@ -185,7 +177,7 @@ class wechatCallbackapi{
                     //消息链接
                     $Url = $postObj->Url;
                     //回复
-                    $contentStr = "Title="+$Title+"\nDescription="+$Description+"\nUrl="+$Url;
+                    $contentStr = "Title=".$Title."\nDescription=".$Description."\nUrl=".$Url;
                     $resultStr = sprintf($textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 default:
