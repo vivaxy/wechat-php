@@ -16,7 +16,7 @@ class mysql {
         mysql_select_db("loveyqqt_narvixy", $con);
         mysql_query("set names 'utf-8'");
 
-        $result = mysql_query("SELECT * FROM robot WHERE ask = '帮助'");
+        $result = mysql_query("SELECT * FROM robot WHERE ask = '".$ask."'");
 
         $answerArray = array();
 

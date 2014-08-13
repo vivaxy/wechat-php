@@ -5,6 +5,8 @@
  * Project: wechat-php
  * Package: 
  */
+require "mysql.php";
+
 class processMsg {
     public function receiveMsg(){
         //get post data, May be due to the different environments
@@ -30,7 +32,8 @@ class processMsg {
                     //文本消息内容
                     $Content = $postObj->Content;
                     //回复
-                    $contentStr = "you have sent ".$Content;
+                    $robot = new mysql();
+                    $contentStr = $robot->answer($Content);
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "image":

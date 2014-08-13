@@ -5,7 +5,7 @@
  * Project: wechat-php
  * Package: 
  */
-require "wechatCallbackApi.php";
+require "callback.php";
 require "processMsg.php";
 
 //define token
