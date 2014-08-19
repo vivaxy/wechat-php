@@ -5,7 +5,7 @@
  * Project: wechat-php
  * Package: 
  */
-require "mysql.php";
+require "robot.php";
 
 class processMsg {
     public function receiveMsg(){
@@ -31,9 +31,17 @@ class processMsg {
                 case "text":
                     //文本消息内容
                     $Content = $postObj->Content;
-                    //回复
-                    $robot = new mysql();
-                    $contentStr = $robot->answer($Content);
+                    $robot = new robot();
+                    if (preg_match("/问 .+ 答 .+/", $Content)){
+                        //教学
+                        $str = preg_split("/问 | 答 /", $Content);
+                        $ask = $str[1];
+                        $answer = $str[2];
+                        $contentStr = $robot->teach($ask, $answer);
+                    }else {
+                        //回复
+                        $contentStr = $robot->answer($Content);
+                    }
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "image":
