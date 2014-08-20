@@ -1,3 +1,4 @@
+Holy shit!
 <?php
 
 /**
