@@ -3,10 +3,11 @@
  * Author : vivaxy
  * Date   : 2014/8/13 13:12
  * Project: wechat-php
- * Package: 
+ * Package:
  */
 //消息模板
-class templates{
+class templates
+{
     const textTpl = "<xml>
 						<ToUserName><![CDATA[%s]]></ToUserName>
 						<FromUserName><![CDATA[%s]]></FromUserName>

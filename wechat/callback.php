@@ -1,23 +1,26 @@
 <?php
+
 /**
  * Author : vivaxy
  * Date   : 2014/8/13 13:00
  * Project: wechat-php
- * Package: 
+ * Package:
  */
-
-class wechatCallbackApi{
-    public function valid(){
+class wechatCallbackApi
+{
+    public function valid()
+    {
         $echoStr = $_GET["echostr"];
 
         //valid signature
-        if($this->checkSignature()){
+        if ($this->checkSignature()) {
             return $echoStr;
         }
         return "unknow request";
     }
 
-    private function checkSignature(){
+    private function checkSignature()
+    {
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];
@@ -25,8 +28,8 @@ class wechatCallbackApi{
         $token = TOKEN;
         $tmpArr = array($token, $timestamp, $nonce);
         sort($tmpArr, SORT_STRING);
-        $tmpStr = implode( $tmpArr );
-        $tmpStr = sha1( $tmpStr );
+        $tmpStr = implode($tmpArr);
+        $tmpStr = sha1($tmpStr);
 
         return $tmpStr == $signature;
     }

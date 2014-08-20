@@ -16,5 +16,5 @@ if (!isset($_GET["echostr"])){
     echo $processMsg->receiveMsg();
 }else {
     //valid
-    echo $wechatObj->valid();
+    echo $wechatCallbackApi->valid();
 }

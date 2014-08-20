@@ -1,18 +1,21 @@
 <?php
+
 /**
  * Author : vivaxy
  * Date   : 2014/8/13 12:57
  * Project: wechat-php
- * Package: 
+ * Package:
  */
-class processMsg {
-    public function receiveMsg(){
+class processMsg
+{
+    public function receiveMsg()
+    {
         //get post data, May be due to the different environments
         $postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
         require "templates.php";
         $tpl = new templates();
         //extract post data
-        if (!empty($postStr)){
+        if (!empty($postStr)) {
             $postObj = simplexml_load_string($postStr, 'SimpleXMLElement', LIBXML_NOCDATA);
             $postMsgType = $postObj->MsgType;
             //开发者微信号
@@ -25,19 +28,19 @@ class processMsg {
             $MsgId = $postObj->MsgId;
             //根据消息类型获取用户发送的消息
             $respTime = time();
-            switch ($postMsgType){
+            switch ($postMsgType) {
                 case "text":
                     //文本消息内容
                     $Content = $postObj->Content;
                     require "robot.php";
                     $robot = new robot();
-                    if (preg_match("/问 .+ 答 .+/", $Content)){
+                    if (preg_match("/问 .+ 答 .+/", $Content)) {
                         //教学
                         $str = preg_split("/问 | 答 /", $Content);
                         $ask = $str[1];
                         $answer = $str[2];
                         $contentStr = $robot->teach($ask, $answer);
-                    }else {
+                    } else {
                         //回复
                         $contentStr = $robot->answer($Content);
                     }
@@ -49,7 +52,7 @@ class processMsg {
                     //图片消息媒体id，可以调用多媒体文件下载接口拉取数据。
                     $MediaId = $postObj->MediaId;
                     //回复
-                    $contentStr = "PicUrl=".$PicUrl."\nMediaId=".$MediaId;
+                    $contentStr = "PicUrl=" . $PicUrl . "\nMediaId=" . $MediaId;
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "voice":
@@ -58,7 +61,7 @@ class processMsg {
                     //语音格式，如amr，speex等
                     $Format = $postObj->Format;
                     //回复
-                    $contentStr = "MediaId=".$MediaId."\nFormat=".$Format;
+                    $contentStr = "MediaId=" . $MediaId . "\nFormat=" . $Format;
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "video":
@@ -67,7 +70,7 @@ class processMsg {
                     //视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
                     $ThumbMediaId = $postObj->ThumbMediaId;
                     //回复
-                    $contentStr = "MediaId=".$MediaId."\nThumbMediaId=".$ThumbMediaId;
+                    $contentStr = "MediaId=" . $MediaId . "\nThumbMediaId=" . $ThumbMediaId;
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "location":
@@ -80,7 +83,7 @@ class processMsg {
                     //地理位置信息
                     $Label = $postObj->Label;
                     //回复
-                    $contentStr = "Location_X=".$Location_X."\nLocation_Y=".$Location_Y."\nScale=".$Scale."\nLabel=".$Label;
+                    $contentStr = "Location_X=" . $Location_X . "\nLocation_Y=" . $Location_Y . "\nScale=" . $Scale . "\nLabel=" . $Label;
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "link":
@@ -91,12 +94,12 @@ class processMsg {
                     //消息链接
                     $Url = $postObj->Url;
                     //回复
-                    $contentStr = "Title=".$Title."\nDescription=".$Description."\nUrl=".$Url;
+                    $contentStr = "Title=" . $Title . "\nDescription=" . $Description . "\nUrl=" . $Url;
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
                 case "event":
                     $Event = $postObj->Event;
-                    switch ($Event){
+                    switch ($Event) {
                         case "subscribe":
                             //事件KEY值，qrscene_为前缀，后面为二维码的参数值
                             $EventKey = $postObj->EventKey;
@@ -104,8 +107,8 @@ class processMsg {
                             $Ticket = $postObj->Ticket;
                             if ($EventKey == "" && $Ticket == "") {
                                 $contentStr = "欢迎关注！回复帮助，查看帮助。";
-                            }else{
-                                $contentStr = "EventKey=".$EventKey."\nTicket=".$Ticket;
+                            } else {
+                                $contentStr = "EventKey=" . $EventKey . "\nTicket=" . $Ticket;
                             }
                             break;
                         case "unsubscribe":
@@ -116,7 +119,7 @@ class processMsg {
                             $EventKey = $postObj->EventKey;
                             //二维码的ticket，可用来换取二维码图片
                             $Ticket = $postObj->Ticket;
-                            $contentStr = "EventKey=".$EventKey."\nTicket=".$Ticket;
+                            $contentStr = "EventKey=" . $EventKey . "\nTicket=" . $Ticket;
                             break;
                         case "LOCATION":
                             //地理位置纬度
@@ -125,17 +128,17 @@ class processMsg {
                             $Longitude = $postObj->Longitude;
                             //地理位置精度
                             $Precision = $postObj->Precision;
-                            $contentStr = "Latitude=".$Latitude."\nLongitude=".$Longitude."\nPrecision=".$Precision;
+                            $contentStr = "Latitude=" . $Latitude . "\nLongitude=" . $Longitude . "\nPrecision=" . $Precision;
                             break;
                         case "CLICK":
                             //事件KEY值，与自定义菜单接口中KEY值对应
                             $EventKey = $postObj->EventKey;
-                            $contentStr = "EventKey=".$EventKey;
+                            $contentStr = "EventKey=" . $EventKey;
                             break;
                         case "VIEW":
                             //事件KEY值，与自定义菜单接口中KEY值对应
                             $EventKey = $postObj->EventKey;
-                            $contentStr = "EventKey=".$EventKey;
+                            $contentStr = "EventKey=" . $EventKey;
                             break;
                         default:
                             $contentStr = "unknown message type";
@@ -149,7 +152,7 @@ class processMsg {
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
             }
-        }else{//empty post string
+        } else { //empty post string
             //return empty string
             $resultStr = "";
         }
