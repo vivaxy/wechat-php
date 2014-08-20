@@ -5,8 +5,6 @@
  * Project: wechat-php
  * Package: 
  */
-require "robot.php";
-
 class processMsg {
     public function receiveMsg(){
         //get post data, May be due to the different environments
@@ -31,6 +29,7 @@ class processMsg {
                 case "text":
                     //文本消息内容
                     $Content = $postObj->Content;
+                    require "robot.php";
                     $robot = new robot();
                     if (preg_match("/问 .+ 答 .+/", $Content)){
                         //教学
@@ -95,13 +94,63 @@ class processMsg {
                     $contentStr = "Title=".$Title."\nDescription=".$Description."\nUrl=".$Url;
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;
+                case "event":
+                    $Event = $postObj->Event;
+                    switch ($Event){
+                        case "subscribe":
+                            //事件KEY值，qrscene_为前缀，后面为二维码的参数值
+                            $EventKey = $postObj->EventKey;
+                            //二维码的ticket，可用来换取二维码图片
+                            $Ticket = $postObj->Ticket;
+                            if ($EventKey == "" && $Ticket == "") {
+                                $contentStr = "欢迎关注！回复帮助，查看帮助。";
+                            }else{
+                                $contentStr = "EventKey=".$EventKey."\nTicket=".$Ticket;
+                            }
+                            break;
+                        case "unsubscribe":
+                            $contentStr = "取消关注";
+                            break;
+                        case "SCAN":
+                            //事件KEY值，是一个32位无符号整数，即创建二维码时的二维码scene_id
+                            $EventKey = $postObj->EventKey;
+                            //二维码的ticket，可用来换取二维码图片
+                            $Ticket = $postObj->Ticket;
+                            $contentStr = "EventKey=".$EventKey."\nTicket=".$Ticket;
+                            break;
+                        case "LOCATION":
+                            //地理位置纬度
+                            $Latitude = $postObj->Latitude;
+                            //地理位置经度
+                            $Longitude = $postObj->Longitude;
+                            //地理位置精度
+                            $Precision = $postObj->Precision;
+                            $contentStr = "Latitude=".$Latitude."\nLongitude=".$Longitude."\nPrecision=".$Precision;
+                            break;
+                        case "CLICK":
+                            //事件KEY值，与自定义菜单接口中KEY值对应
+                            $EventKey = $postObj->EventKey;
+                            $contentStr = "EventKey=".$EventKey;
+                            break;
+                        case "VIEW":
+                            //事件KEY值，与自定义菜单接口中KEY值对应
+                            $EventKey = $postObj->EventKey;
+                            $contentStr = "EventKey=".$EventKey;
+                            break;
+                        default:
+                            $contentStr = "unknown message type";
+                            break;
+                    }
+                    $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
+                    break;
                 default:
                     //回复
                     $contentStr = "unknown message type";
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
+                    break;
             }
-        }else{
-            //回复
+        }else{//empty post string
+            //return empty string
             $resultStr = "";
         }
         return $resultStr;

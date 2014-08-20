@@ -5,12 +5,11 @@
  * Project: wechat-php
  * Package: 
  */
-require "callback.php";
-require "processMsg.php";
-
 //define token
 define("TOKEN", "Xy1234567890");
+require "callback.php";
 $wechatCallbackApi = new wechatCallbackApi();
+require "processMsg.php";
 $processMsg = new processMsg();
 if (!isset($_GET["echostr"])){
     //reply message

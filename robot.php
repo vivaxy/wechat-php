@@ -5,11 +5,9 @@
  * Project: wechat-php
  * Package: 
  */
-require "mysql.php";
-
 class robot {
     public function answer($ask){
-
+        require "mysql.php";
         $mysql = new mysql();
         $con = $mysql->getConnection();
 
@@ -35,6 +33,7 @@ class robot {
         return $answer;
     }
     public function teach($ask, $answer){
+        require "mysql.php";
         $mysql = new mysql();
         $con = $mysql->getConnection();
 
