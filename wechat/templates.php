@@ -1,4 +1,3 @@
-Oh my god!
 <?php
 /**
  * Author : vivaxy

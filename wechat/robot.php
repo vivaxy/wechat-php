@@ -1,4 +1,3 @@
-Jesus!
 <?php
 
 /**
@@ -23,7 +22,8 @@ class robot
             array_push($answerArray, $row["answer"]);
         }
 
-        if (count($answerArray) == 0) return "还没人教过我怎么回答这个问题。";
+        //if (count($answerArray) == 0) return "还没人教过我怎么回答这个问题。";
+        if (count($answerArray) == 0) return "";
 
         $rand = rand(0, count($answerArray) - 1);
 

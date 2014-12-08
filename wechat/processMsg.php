@@ -1,4 +1,3 @@
-Oh no!
 <?php
 
 /**
@@ -44,6 +43,10 @@ class processMsg
                     } else {
                         //回复
                         $contentStr = $robot->answer($Content);
+                        if ($contentStr == ""){
+                            $resultStr = "";
+                            break;
+                        }
                     }
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
                     break;

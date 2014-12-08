@@ -1,4 +1,3 @@
-What the hell!
 <?php
 /**
  * Author : vivaxy
@@ -14,7 +13,8 @@ require "processMsg.php";
 $processMsg = new processMsg();
 if (!isset($_GET["echostr"])) {
     //reply message
-    echo $processMsg->receiveMsg();
+    $echo = $processMsg->receiveMsg();
+    if ($echo != "") echo $echo;
 } else {
     //valid
     echo $wechatCallbackApi->valid();
