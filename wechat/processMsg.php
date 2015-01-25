@@ -80,8 +80,7 @@ class processMsg
                         //回复
                         $contentStr = $robot->answer($Content);
                         if ($contentStr == "") {
-                            $resultStr = "";
-                            break;
+                            $contentStr = $Content;
                         }
                     }
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
@@ -146,7 +145,7 @@ class processMsg
                             //二维码的ticket，可用来换取二维码图片
                             $Ticket = $postObj->Ticket;
                             if ($EventKey == "" && $Ticket == "") {
-                                $contentStr = "欢迎关注！回复帮助，查看帮助。";
+                                $contentStr = "来来来！输入\"帮助\"查看帮助。";
                             } else {
                                 $contentStr = "EventKey=" . $EventKey . "\nTicket=" . $Ticket;
                             }
