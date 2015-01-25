@@ -47,13 +47,30 @@ class processMsg
                         $mysql = new mysql();
                         $con = $mysql->getConnection();
                         // get column names
-                        $columnArray = preg_split("/vivaxy select |,/", $Content, 0, PREG_SPLIT_NO_EMPTY);
+                        $selectString = preg_split("/vivaxy select | where | limit /", $Content, 0, PREG_SPLIT_NO_EMPTY)[0];
+
+                        $columnArray = preg_split("/,/", $selectString, 0, PREG_SPLIT_NO_EMPTY);
+                        // get condition clauses
+                        // where
+                        $whereClauses = "";
+                        if (preg_match("/ where /", $Content)) {
+                            $whereClauses = preg_split("/ where /", $Content, 0, PREG_SPLIT_NO_EMPTY)[1];
+                            $whereClauses = preg_split("/ limit /", $whereClauses, 0, PREG_SPLIT_NO_EMPTY)[0];
+                            $whereClauses = " where " . $whereClauses;
+                        }
+                        // limit
+                        $limitClauses = "";
+                        if (preg_match("/ limit /", $Content)) {
+                            $limitClauses = preg_split("/ limit /", $Content, 0, PREG_SPLIT_NO_EMPTY)[1];
+                            $limitClauses = preg_split("/ where /", $limitClauses, 0, PREG_SPLIT_NO_EMPTY)[0];
+                            $limitClauses = " limit " . $limitClauses;
+                        }
                         // get mysql query string
-                        $queryString = "select " . implode(",", $columnArray) . " from robot";
+                        $queryString = "select " . implode(",", $columnArray) . " from robot" . $whereClauses .$limitClauses;
                         // get mysql result
                         $result = mysql_query($queryString, $con);
                         // get echo string
-                        $contentStr = implode(" | ", $columnArray) . "\n";
+                        $contentStr = $queryString . "\n" . implode(" | ", $columnArray) . "\n";
                         while ($row = mysql_fetch_row($result)) {
                             $contentStr = $contentStr . implode(" | ", $row) . "\n";
                         }
