@@ -40,10 +40,32 @@ class processMsg
                         $ask = $str[1];
                         $answer = $str[2];
                         $contentStr = $robot->teach($ask, $answer);
+                    } elseif (preg_match("/select.+/", $Content)) {
+                        // 查看 模式
+                        require "mysql.php";
+                        $mysql = new mysql();
+                        $con = $mysql->getConnection();
+                        $result = mysql_query("select * from robot", $con);
+                        $contentStr = "id | updated | created | lastUsed | used | taught | ask | answer | isValid \n";
+                        while ($row = mysql_fetch_array($result)) {
+
+                            $contentStr = $contentStr .
+                                $row['id'] . " | " .
+                                $row['updated'] . " | " .
+                                $row['created'] . " | " .
+                                $row['lastUsed'] . " | " .
+                                $row['used'] . " | " .
+                                $row['taught'] . " | " .
+                                $row['ask'] . " | " .
+                                $row['answer'] . " | " .
+                                $row['isValid'] . " | \n";
+
+                        }
+                        $mysql->closeConnection($con);
                     } else {
                         //回复
                         $contentStr = $robot->answer($Content);
-                        if ($contentStr == ""){
+                        if ($contentStr == "") {
                             $resultStr = "";
                             break;
                         }
