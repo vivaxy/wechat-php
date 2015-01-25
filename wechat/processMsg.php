@@ -47,7 +47,7 @@ class processMsg
                         $mysql = new mysql();
                         $con = $mysql->getConnection();
                         // get column names
-                        $columnArray = preg_grep("/vivaxy select /", $Content, 0, PREG_SPLIT_NO_EMPTY);
+                        $columnArray = preg_split("/vivaxy select |,/", $Content, 0, PREG_SPLIT_NO_EMPTY);
                         // get mysql query string
                         $queryString = "select " . implode(",", $columnArray) . " from robot";
                         // get mysql result
