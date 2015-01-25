@@ -40,22 +40,22 @@ class processMsg
                         $ask = $str[1];
                         $answer = $str[2];
                         $contentStr = $robot->teach($ask, $answer);
-                    } elseif (preg_split("/vivaxy select .+/", $Content)) {
+                    } elseif (preg_match("/vivaxy select .+/", $Content)) {
                         // 查看 模式
                         // mysql connection
                         require "mysql.php";
                         $mysql = new mysql();
                         $con = $mysql->getConnection();
                         // get column names
-                        $columnArray = preg_split("/vivaxy select |,/", $Content);
+                        $columnArray = preg_grep("/vivaxy select /", $Content, 0, PREG_SPLIT_NO_EMPTY);
                         // get mysql query string
                         $queryString = "select " . implode(",", $columnArray) . " from robot";
                         // get mysql result
                         $result = mysql_query($queryString, $con);
                         // get echo string
                         $contentStr = implode(" | ", $columnArray) . "\n";
-                        while ($row = mysql_fetch_array($result)) {
-                            $contentStr = $contentStr . implode(" | ", $columnArray) . "\n";
+                        while ($row = mysql_fetch_row($result)) {
+                            $contentStr = $contentStr . implode(" | ", $row) . "\n";
                         }
                         // close mysql connection
                         $mysql->closeConnection($con);
