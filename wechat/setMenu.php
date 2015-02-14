@@ -5,29 +5,9 @@
  * Date: 150214
  * Time: 14:22
  */
+$token = 'o0OSxm_xqjOmZiZ5y0xSfKiu6fcIdXA3yxr8J7ky8OiLKEfKzRw5s8T0oaAYLd8YNgWy2ZgqqVVfdDlnzqzlPMe6Q2akGkuIwLrFBo2Vza8';
 
-/**
- * 发送post请求
- * @param string $url 请求地址
- * @param array $post_data post键值对数据
- * @return string
- */
-function send_post($url, $post_data) {
-
-    $postdata = http_build_query($post_data);
-    $options = array(
-        'http' => array(
-        'method' => 'POST',
-			'header' => 'Content-type:application/x-www-form-urlencoded',
-			'content' => $postdata,
-			'timeout' => 15 * 60 // 超时时间（单位:s）
-		)
-	);
-	$context = stream_context_create($options);
-	$result = file_get_contents($url, false, $context);
-
-	return $result;
-}
+$url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=' . $token;
 
 $post_data = '{
     "button": [
@@ -99,4 +79,11 @@ $post_data = '{
     ]
 }';
 
-send_post('https://api.weixin.qq.com/cgi-bin/menu/create?access_token=rL8ZCIZPGl-oYN7UgsnpLPLTIWAdJTvgv0bachgPEiyrmJix9G0l8rqd8E_BdbVPl7IItSAWP4cyutcErao64jVgwi5PclOMkRhyUzAyolw', $post_data);
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_HEADER, 0);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+echo curl_exec($ch);
