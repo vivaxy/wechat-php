@@ -66,7 +66,7 @@ class processMsg
                             $limitClauses = " limit " . $limitClauses;
                         }
                         // get mysql query string
-                        $queryString = "select " . implode(",", $columnArray) . " from robot" . $whereClauses .$limitClauses;
+                        $queryString = "select " . implode(",", $columnArray) . " from robot" . $whereClauses . $limitClauses;
                         // get mysql result
                         $result = mysql_query($queryString, $con);
                         // get echo string
