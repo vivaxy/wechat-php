@@ -80,7 +80,8 @@ class processMsg
                         //回复
                         $contentStr = $robot->answer($Content);
                         if ($contentStr == "") {
-                            $contentStr = $Content;
+                            //$contentStr = $Content;
+                            $contentStr = "嗯~";
                         }
                     }
                     $resultStr = sprintf($tpl::textTpl, $FromUserName, $ToUserName, $respTime, $contentStr);
