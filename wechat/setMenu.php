@@ -5,7 +5,7 @@
  * Date: 150214
  * Time: 14:22
  */
-$token = 'o0OSxm_xqjOmZiZ5y0xSfKiu6fcIdXA3yxr8J7ky8OiLKEfKzRw5s8T0oaAYLd8YNgWy2ZgqqVVfdDlnzqzlPMe6Q2akGkuIwLrFBo2Vza8';
+$token = 'qksTpjVqtE4D8j41HAntqr-xwS_4vu2SFmbHF6XveuGu2UieNrVJn65-s3p6dZHvCMfN1hrPddofz-lAjeamQg-UBYQJ51zNMUUl7yb46HA';
 
 $url = 'https://api.weixin.qq.com/cgi-bin/menu/create?access_token=' . $token;
 
