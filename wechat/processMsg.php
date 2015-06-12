@@ -76,6 +76,23 @@ class processMsg
                         }
                         // close mysql connection
                         $mysql->closeConnection($con);
+                    } elseif (preg_match("/vivaxy delete .+/", $Content)) {
+                        // 删除 模式
+                        // mysql connection
+                        require "mysql.php";
+                        $mysql = new mysql();
+                        $con = $mysql->getConnection();
+                        // get column names
+                        $deleteId = preg_split("/vivaxy delete /", $Content, 0, PREG_SPLIT_NO_EMPTY)[0];
+
+                        // get mysql query string
+                        $queryString = "delete from robot where id = " . $deleteId;
+                        // get mysql result
+                        $result = mysql_query($queryString, $con);
+                        // get echo string
+                        $contentStr = $queryString . "\n" . $result;
+                        // close mysql connection
+                        $mysql->closeConnection($con);
                     } else {
                         //回复
                         $contentStr = $robot->answer($Content);
